@@ -48,7 +48,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/gempesaw/Selenium-Screenshot/issues"
@@ -59,6 +59,6 @@
          "web" : "https://github.com/gempesaw/Selenium-Screenshot"
       }
    },
-   "version" : "0.001"
+   "version" : "0.01"
 }
 

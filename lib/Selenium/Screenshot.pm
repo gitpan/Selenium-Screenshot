@@ -1,5 +1,5 @@
 package Selenium::Screenshot;
-$Selenium::Screenshot::VERSION = '0.001'; # TRIAL
+$Selenium::Screenshot::VERSION = '0.01';
 # ABSTRACT: Compare and contrast Webdriver screenshots in PNG format
 use Moo;
 use Image::Compare;
@@ -169,6 +169,8 @@ __END__
 
 Selenium::Screenshot - Compare and contrast Webdriver screenshots in PNG format
 
+=for markdown [![Build Status](https://travis-ci.org/gempesaw/Selenium-Screenshot.svg?branch=master)](https://travis-ci.org/gempesaw/Selenium-Screenshot)
+
 =head1 INSTALLATION
 
 This module depends on L<Image::Compare> for comparison, and
@@ -185,7 +187,7 @@ page|http://ethan.tira-thompson.com/Mac_OS_X_Ports.html> may help.
 
 =head1 VERSION
 
-version 0.001
+version 0.01
 
 =head1 SYNOPSIS
 
