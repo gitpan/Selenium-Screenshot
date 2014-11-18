@@ -20,7 +20,8 @@ my $orig = Selenium::Screenshot->new(
     metadata => {
         build => 'prod',
         browser => 'firefox',
-        'any metadata' => 'you might like'
+        keys => 'are sorted alphabetically',
+        but => 'are not included in the filename'
     }
 );
 
@@ -39,5 +40,21 @@ my $blue_file = Selenium::Screenshot->new(
 
 unless ($orig->compare($blue_file)) {
     my $diff_file = $orig->difference($blue_file);
-    print 'The images differ; see ' . $diff_file . ' for details';
+    print 'The images differ; see
+
+' . $diff_file . '
+
+for details. We\'ll try to open it for you, but we won\'t try very hard...';
+
+    my $open_cmd;
+    if ($^O eq 'darwin') {
+        $open_cmd = 'open'
+    }
+    elsif ($^O eq 'MSWin32') {
+        $open_cmd = '';
+    }
+    else {
+        $open_cmd = 'display';
+    }
+    `$open_cmd $diff_file`;
 }

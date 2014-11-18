@@ -10,6 +10,10 @@ dist.ini
 examples/basic.pl
 examples/screenshots/blue-stage-http-www.google.com.png
 examples/screenshots/blue-stage.png
+examples/screenshots/firefox-prod-are-not-included-in-the-filename-are-sorted-alphabetically-diff.png
+examples/screenshots/firefox-prod-are-not-included-in-the-filename-are-sorted-alphabetically.png
+examples/screenshots/firefox-prod-are-otherwise-ignored-are-sorted-alphabetically-diff.png
+examples/screenshots/firefox-prod-are-otherwise-ignored-are-sorted-alphabetically.png
 examples/screenshots/you-might-like-firefox-prod-diff.png
 examples/screenshots/you-might-like-firefox-prod.png
 lib/Selenium/Screenshot.pm

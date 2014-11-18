@@ -1,5 +1,5 @@
 package Selenium::Screenshot;
-$Selenium::Screenshot::VERSION = '0.01';
+$Selenium::Screenshot::VERSION = '0.02';
 # ABSTRACT: Compare and contrast Webdriver screenshots in PNG format
 use Moo;
 use Image::Compare;
@@ -109,19 +109,37 @@ sub difference {
         )
     );
 
-    my $name = $self->filename('diff');
+
+    my $name = $self->diff_filename;
     my $diff = $self->_cmp->compare;
     $diff->write( file => $name );
     return $name;
 }
 
+sub diff_filename {
+    my ($self) = @_;
+
+    # we'd like to suffix "diff" on to the filename to separate the
+    # diff files from the normal files. But, since we're sorting the
+    # keys of our metadata, we need to be a little clever about naming
+    # the key of what we're passing to ->filename.
+    my $suffix = 'suffix';
+    if ($self->has_metadata) {
+        my @keys = sort keys %{ $self->metadata };
+        my $last_key = pop @keys;
+        $suffix = 'z' . $last_key;
+    }
+
+    return $self->filename($suffix => 'diff');
+}
 
 
 sub save {
-    my ($self) = @_;
+    my ($self, %overrides) = @_;
 
-    my $filename = $self->filename;
-    open (my $fh, '>', $filename) or croak 'Couldn\'t open ' . $filename . ' for writing: ' . $!;
+    my $filename = $self->filename(%overrides);
+    open (my $fh, '>', $filename)
+      or croak 'Couldn\'t open ' . $filename . ' for writing: ' . $!;
     binmode $fh;
     print $fh $self->png;
     close ($fh);
@@ -131,20 +149,24 @@ sub save {
 
 
 sub filename {
-    my ($self, $suffix) = @_;
-    $suffix = $suffix ? '-' . $suffix : '';
+    my ($self, %overrides) = @_;
 
     my @filename_parts;
-    if ($self->has_metadata) {
-        foreach (sort keys %{ $self->metadata }) {
-            push @filename_parts, $self->_sanitize_string($self->metadata->{$_});
+    if ($self->has_metadata or %overrides) {
+        my $metadata = {
+            %{ $self->metadata},
+            %overrides
+        };
+
+        foreach (sort keys %{ $metadata }) {
+            push @filename_parts, $self->_sanitize_string($metadata->{$_});
         }
     }
     else {
         push @filename_parts, time
     }
 
-    my $filename = $self->folder . join('-', @filename_parts) . $suffix . '.png';
+    my $filename = $self->folder . join('-', @filename_parts) . '.png';
     $filename =~ s/\-+/-/g;
     return $filename;
 }
@@ -187,7 +209,7 @@ page|http://ethan.tira-thompson.com/Mac_OS_X_Ports.html> may help.
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 SYNOPSIS
 
@@ -241,8 +263,9 @@ you invoke the L<Selenium::Remote::Driver/screenshot> method.
 =head2 folder
 
 OPTIONAL - a string where you'd like to save the screenshots on your
-local machine. It will be run through L<Cwd/abs_path> and we'll try to save
-there.
+local machine. It will be run through L<Cwd/abs_path> and we'll try to
+save there. If you don't pass anything and you invoke L</save>, we'll
+try to save in C<($pwd)/screenshots/*>, wherever that may be.
 
 =head2 metadata
 
@@ -291,14 +314,60 @@ The difference image is scaled from white for no change to fuschia for
 
 =head2 save
 
-Persist your screenshot to disk. Without any arguments, we'll try to
+  Persist your screenshot to disk. Without any arguments, we'll try to
 build a filename from your metadata if you provided any, and the
 timestamp if you didn't provide any metadata. You probably want to
 provide metadata; timestamps aren't very evocative.
 
+By passing a hash to L</save>, you can alter the filename - any
+arguments passed here will be sorted by key and added to the filename
+along with the metadata you passed in on instantiation. NB: the
+arguments here will shadow the values passed in for metadata, so you
+can override any/all of the metadata keys if you so wish.
+
+    Selenium::Screenshot->new(
+        png => $driver->screenshot,
+        metadata => {
+            key => 'value'
+        }
+    )->save; # screenshots/value.png
+
+    Selenium::Screenshot->new(
+        png => $driver->screenshot,
+        metadata => {
+            key => 'value'
+        }
+    )->save(key => 'override'); # screenshots/override.png
+
 =head2 filename
 
-Get the filename that we constructed for this screenshot.
+Get the filename that we constructed for this screenshot. If you
+passed in a HASHREF to metadata in the constructor, we'll sort that by
+key and concatenate the parts into the filename. If there's no
+metadata, we'll use a timestamp for the filename.
+
+If you pass in a HASH as an argument, it will be combined with the
+metadata and override/shadow any keys that match.
+
+    Selenium::Screenshot->new(
+        png => $driver->screenshot
+    )->filename; # screenshots/203523252.png
+
+    Selenium::Screenshot->new(
+        png => $driver->screenshot,
+        metadata => {
+            key => 'value'
+        }
+    )->filename; # screenshots/value.png
+
+    Selenium::Screenshot->new(
+        png => $driver->screenshot,
+        metadata => {
+            key => 'value'
+        }
+    )->filename(
+        key => 'shadow'
+    ); # screenshots/shadow.png
 
 =head1 SEE ALSO
 

@@ -28,7 +28,31 @@ SAVING: {
     ok($res, 'can save a screenshot');
     ok(-e $screenshot->filename, 'and it actually exists');
     ok($screenshot->filename =~ /screenshots/, 'where we expect it to');
+}
 
+FILENAME: {
+    my $timestamp = Selenium::Screenshot->new(
+        %$basic_args
+    )->filename;
+    cmp_ok($timestamp , '=~', qr/\d+\.png/, 'filename works for timestamp');
+
+    my $metadata = Selenium::Screenshot->new(
+        %$basic_args,
+        metadata => {
+            key => 'value'
+        }
+    )->filename;
+    cmp_ok($metadata , '=~', qr/value\.png/, 'filename works for metadata');
+
+    my $shadow = Selenium::Screenshot->new(
+        %$basic_args,
+        metadata => {
+            key => 'value'
+        }
+    )->filename(
+        key => 'shadow'
+    );
+    cmp_ok($shadow , '=~', qr/shadow\.png/, 'filename works for shadowed metadata');
 }
 
 METADATA: {
@@ -44,7 +68,6 @@ METADATA: {
     ok($filename =~ /random\-1234/, 'meta data is used in filename');
     ok($filename =~ /firefox/, 'meta data is used in filename');
 }
-
 
 DIRTY_STRINGS: {
     my %tests = (
@@ -70,7 +93,8 @@ COMPARE: {
     my $screenshot = Selenium::Screenshot->new(
         png => encode_base64($png_string),
         metadata => {
-            test => 'compare'
+            test => 'compare',
+            and  => 'diff'
         }
     );
 
@@ -83,7 +107,7 @@ COMPARE: {
         # get the difference file
         my $diff_file = $screenshot->difference($different);
         ok( -e $diff_file, 'diff file exists' );
-        ok( $diff_file =~ /-diff\.png/, 'diff is named differently' );
+        cmp_ok( $diff_file, '=~', qr/-diff\.png/, 'diff is named differently' );
     }
 }
 
