@@ -2,10 +2,12 @@ requires "Carp" => "0";
 requires "Cwd" => "0";
 requires "Image::Compare" => "0";
 requires "Imager" => "0";
+requires "Imager::Color" => "0";
 requires "Imager::File::PNG" => "0";
 requires "Imager::Fountain" => "0";
 requires "MIME::Base64" => "0";
 requires "Moo" => "0";
+requires "Scalar::Util" => "0";
 
 on 'test' => sub {
   requires "File::Copy" => "0";

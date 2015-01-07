@@ -25,10 +25,12 @@ my %WriteMakefileArgs = (
     "Cwd" => 0,
     "Image::Compare" => 0,
     "Imager" => 0,
+    "Imager::Color" => 0,
     "Imager::File::PNG" => 0,
     "Imager::Fountain" => 0,
     "MIME::Base64" => 0,
-    "Moo" => 0
+    "Moo" => 0,
+    "Scalar::Util" => 0
   },
   "TEST_REQUIRES" => {
     "File::Copy" => 0,
@@ -37,7 +39,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.02",
+  "VERSION" => "0.03",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -51,10 +53,12 @@ my %FallbackPrereqs = (
   "FindBin" => 0,
   "Image::Compare" => 0,
   "Imager" => 0,
+  "Imager::Color" => 0,
   "Imager::File::PNG" => 0,
   "Imager::Fountain" => 0,
   "MIME::Base64" => 0,
   "Moo" => 0,
+  "Scalar::Util" => 0,
   "Test::More" => 0,
   "strict" => 0,
   "warnings" => 0

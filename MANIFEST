@@ -8,14 +8,9 @@ Makefile.PL
 cpanfile
 dist.ini
 examples/basic.pl
-examples/screenshots/blue-stage-http-www.google.com.png
-examples/screenshots/blue-stage.png
-examples/screenshots/firefox-prod-are-not-included-in-the-filename-are-sorted-alphabetically-diff.png
-examples/screenshots/firefox-prod-are-not-included-in-the-filename-are-sorted-alphabetically.png
-examples/screenshots/firefox-prod-are-otherwise-ignored-are-sorted-alphabetically-diff.png
-examples/screenshots/firefox-prod-are-otherwise-ignored-are-sorted-alphabetically.png
-examples/screenshots/you-might-like-firefox-prod-diff.png
-examples/screenshots/you-might-like-firefox-prod.png
+examples/screenshots/1420648278.png
+examples/screenshots/1420649547.png
+examples/screenshots/diff.png
 lib/Selenium/Screenshot.pm
 t/Screenshot.t
 t/sample-diff.png

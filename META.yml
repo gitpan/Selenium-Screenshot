@@ -22,11 +22,13 @@ requires:
   Cwd: '0'
   Image::Compare: '0'
   Imager: '0'
+  Imager::Color: '0'
   Imager::File::PNG: '0'
   Imager::Fountain: '0'
   MIME::Base64: '0'
   Moo: '0'
+  Scalar::Util: '0'
 resources:
   bugtracker: https://github.com/gempesaw/Selenium-Screenshot/issues
   repository: git://github.com/gempesaw/Selenium-Screenshot.git
-version: '0.02'
+version: '0.03'

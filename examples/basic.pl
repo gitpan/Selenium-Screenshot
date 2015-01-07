@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Selenium::Remote::Driver;
+use lib('../lib');
 use Selenium::Screenshot;
 
 my $driver = Selenium::Remote::Driver->new;
@@ -14,35 +15,19 @@ $driver->set_window_size(320, 480);
 # entire height of the page, which will slow down ->difference
 $driver->get('http://www.google.com/404');
 
-# Take an original screenshot
-my $orig = Selenium::Screenshot->new(
-    png => $driver->screenshot,
-    metadata => {
-        build => 'prod',
-        browser => 'firefox',
-        keys => 'are sorted alphabetically',
-        but => 'are not included in the filename'
-    }
-);
+my $white = Selenium::Screenshot->new(png => $driver->screenshot);
 
 # Alter the page by turning the background blue
 $driver->execute_script('document.getElementsByTagName("body")[0].style.backgroundColor = "blue"');
 
 # Take another screenshot
-my $blue_file = Selenium::Screenshot->new(
-    png => $driver->screenshot,
-    metadata => {
-        build => 'stage',
-        bg => 'blue',
-        url => 'http://www.google.com'
-    }
-)->save;
+my $blue = Selenium::Screenshot->new(png => $driver->screenshot);
 
-unless ($orig->compare($blue_file)) {
-    my $diff_file = $orig->difference($blue_file);
+unless ($white->compare($blue)) {
+    my $diff_file = $white->difference($blue);
     print 'The images differ; see
 
-' . $diff_file . '
+    ' . $diff_file . '
 
 for details. We\'ll try to open it for you, but we won\'t try very hard...';
 
